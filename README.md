@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # MediFind - Pharmacy Information App
 
 <div align="center">
@@ -59,6 +58,8 @@ yarn install
 
 ### 3. Configure Environment Variables
 
+#### Option 1: Local Development (using .env file)
+
 Create a `.env` file in the root directory:
 
 ```bash
@@ -72,6 +73,16 @@ OPENAI_API_KEY=your_openai_api_key_here
 APP_NAME=MediFind
 COPYRIGHT_OWNER=SA-PrivateLimited
 ```
+
+#### Option 2: GitHub Environments (for CI/CD)
+
+Environment variables are configured in GitHub Environments:
+- **Secret**: `OPENAI_API_KEY` - Your OpenAI API key
+- **Variables**: 
+  - `APP_NAME=MediFind`
+  - `COPYRIGHT_OWNER=SA-PrivateLimited`
+
+These are accessible via GitHub Actions workflows in the `production` environment.
 
 ### 4. Install iOS Dependencies (macOS only)
 
@@ -346,6 +357,3 @@ This app is for educational purposes only. The information provided should not b
 ---
 
 **Built with ❤️ using React Native**
-=======
-# MediFind
->>>>>>> 82d5b0c3de630f67dd9e98608c7d07c05a103749
