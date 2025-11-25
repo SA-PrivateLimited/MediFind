@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MediFind - Pharmacy Information App
 
 <div align="center">
@@ -345,3 +346,6 @@ This app is for educational purposes only. The information provided should not b
 ---
 
 **Built with ❤️ using React Native**
+=======
+# MediFind
+>>>>>>> 82d5b0c3de630f67dd9e98608c7d07c05a103749
