@@ -66,8 +66,6 @@ android {
         main {
             java {
                 srcDirs += [
-                    "$buildDir/generated/source/buildConfig/debug",
-                    "$buildDir/generated/source/buildConfig/release",
                     "$buildDir/generated/rncli/src/main/java"
                 ]
             }
