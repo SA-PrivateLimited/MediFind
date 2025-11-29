@@ -3,6 +3,7 @@
 
 # Environment
 .env
+firebase/serviceAccountKey.json
 
 # Xcode
 build/

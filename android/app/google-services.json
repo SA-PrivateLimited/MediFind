@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "136199853280",
+    "project_id": "medifind-doctor",
+    "storage_bucket": "medifind-doctor.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:136199853280:android:fa0c52ee0e545d08e3ec85",
+        "android_client_info": {
+          "package_name": "com.medifind"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "136199853280-v1ea3pa1fr44qv5hihp6ougjcrib3dj5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ8O8S8t-L9oaCucHVmP6iyB2iGH9QZMk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "136199853280-v1ea3pa1fr44qv5hihp6ougjcrib3dj5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

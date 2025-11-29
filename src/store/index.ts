@@ -1,5 +1,12 @@
 import {create} from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import type {
+  Doctor,
+  User,
+  Consultation,
+  ChatMessage,
+  Prescription,
+} from '../types/consultation';
 
 export interface Medicine {
   id: string;
@@ -47,6 +54,32 @@ interface AppState {
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
 
+  // Consultation - User
+  currentUser: User | null;
+  setCurrentUser: (user: User | null) => void;
+
+  // Consultation - Doctors
+  doctors: Doctor[];
+  setDoctors: (doctors: Doctor[]) => void;
+
+  // Consultation - Consultations
+  consultations: Consultation[];
+  setConsultations: (consultations: Consultation[]) => void;
+  addConsultation: (consultation: Consultation) => void;
+  updateConsultation: (id: string, updates: Partial<Consultation>) => void;
+  activeConsultation: Consultation | null;
+  setActiveConsultation: (consultation: Consultation | null) => void;
+
+  // Consultation - Chat
+  chatMessages: {[consultationId: string]: ChatMessage[]};
+  setChatMessages: (consultationId: string, messages: ChatMessage[]) => void;
+  addChatMessage: (consultationId: string, message: ChatMessage) => void;
+
+  // Consultation - Prescriptions
+  prescriptions: Prescription[];
+  setPrescriptions: (prescriptions: Prescription[]) => void;
+  addPrescription: (prescription: Prescription) => void;
+
   // Hydration
   hydrate: () => Promise<void>;
 }
@@ -57,6 +90,14 @@ export const useStore = create<AppState>((set, get) => ({
   favorites: [],
   reminders: [],
   isLoading: false,
+
+  // Consultation initial state
+  currentUser: null,
+  doctors: [],
+  consultations: [],
+  activeConsultation: null,
+  chatMessages: {},
+  prescriptions: [],
 
   toggleTheme: async () => {
     const newTheme = !get().isDarkMode;
@@ -114,13 +155,95 @@ export const useStore = create<AppState>((set, get) => ({
 
   setIsLoading: (loading: boolean) => set({isLoading: loading}),
 
+  // Consultation actions
+  setCurrentUser: async (user: User | null) => {
+    set({currentUser: user});
+    if (user) {
+      await AsyncStorage.setItem('currentUser', JSON.stringify(user));
+    } else {
+      await AsyncStorage.removeItem('currentUser');
+    }
+  },
+
+  setDoctors: async (doctors: Doctor[]) => {
+    set({doctors});
+    await AsyncStorage.setItem('doctors', JSON.stringify(doctors));
+    await AsyncStorage.setItem('doctorsCachedAt', new Date().toISOString());
+  },
+
+  setConsultations: async (consultations: Consultation[]) => {
+    set({consultations});
+    await AsyncStorage.setItem('consultations', JSON.stringify(consultations));
+  },
+
+  addConsultation: async (consultation: Consultation) => {
+    const consultations = [...get().consultations, consultation];
+    set({consultations});
+    await AsyncStorage.setItem('consultations', JSON.stringify(consultations));
+  },
+
+  updateConsultation: async (id: string, updates: Partial<Consultation>) => {
+    const consultations = get().consultations.map(c =>
+      c.id === id ? {...c, ...updates} : c,
+    );
+    set({consultations});
+    await AsyncStorage.setItem('consultations', JSON.stringify(consultations));
+  },
+
+  setActiveConsultation: (consultation: Consultation | null) => {
+    set({activeConsultation: consultation});
+  },
+
+  setChatMessages: (consultationId: string, messages: ChatMessage[]) => {
+    set({
+      chatMessages: {
+        ...get().chatMessages,
+        [consultationId]: messages,
+      },
+    });
+  },
+
+  addChatMessage: (consultationId: string, message: ChatMessage) => {
+    const existingMessages = get().chatMessages[consultationId] || [];
+    set({
+      chatMessages: {
+        ...get().chatMessages,
+        [consultationId]: [...existingMessages, message],
+      },
+    });
+  },
+
+  setPrescriptions: async (prescriptions: Prescription[]) => {
+    set({prescriptions});
+    await AsyncStorage.setItem('prescriptions', JSON.stringify(prescriptions));
+  },
+
+  addPrescription: async (prescription: Prescription) => {
+    const prescriptions = [...get().prescriptions, prescription];
+    set({prescriptions});
+    await AsyncStorage.setItem('prescriptions', JSON.stringify(prescriptions));
+  },
+
   hydrate: async () => {
     try {
-      const [theme, history, favorites, reminders] = await Promise.all([
+      const [
+        theme,
+        history,
+        favorites,
+        reminders,
+        currentUser,
+        doctors,
+        consultations,
+        prescriptions,
+      ] = await Promise.all([
         AsyncStorage.getItem('theme'),
         AsyncStorage.getItem('searchHistory'),
         AsyncStorage.getItem('favorites'),
         AsyncStorage.getItem('reminders'),
+        AsyncStorage.getItem('currentUser'),
+        AsyncStorage.getItem('doctors'),
+        AsyncStorage.getItem('consultations'),
+        AsyncStorage.getItem('prescriptions'),
       ]);
 
       set({
@@ -128,6 +251,10 @@ export const useStore = create<AppState>((set, get) => ({
         searchHistory: history ? JSON.parse(history) : [],
         favorites: favorites ? JSON.parse(favorites) : [],
         reminders: reminders ? JSON.parse(reminders) : [],
+        currentUser: currentUser ? JSON.parse(currentUser) : null,
+        doctors: doctors ? JSON.parse(doctors) : [],
+        consultations: consultations ? JSON.parse(consultations) : [],
+        prescriptions: prescriptions ? JSON.parse(prescriptions) : [],
       });
     } catch (error) {
       console.error('Failed to hydrate store:', error);

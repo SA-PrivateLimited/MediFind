@@ -11,4 +11,8 @@ module.exports = {
       },
     ],
   ],
+  // Exclude react-native-agora specs from codegen processing
+  exclude: [
+    /node_modules\/react-native-agora\/src\/specs\/.*\.tsx$/,
+  ],
 };
