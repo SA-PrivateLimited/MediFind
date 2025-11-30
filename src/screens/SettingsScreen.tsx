@@ -13,13 +13,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {useStore} from '../store';
 import {lightTheme, darkTheme, commonStyles} from '../utils/theme';
 import {APP_NAME, COPYRIGHT_OWNER} from '@env';
+import authService from '../services/authService';
 
 interface SettingsScreenProps {
   navigation: any;
 }
 
 const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
-  const {isDarkMode, toggleTheme, clearHistory, favorites} = useStore();
+  const {isDarkMode, toggleTheme, clearHistory, favorites, currentUser, setCurrentUser} = useStore();
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const handleClearHistory = () => {
@@ -59,6 +60,25 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
       'MediFind provides medicine information for educational purposes only. Always consult healthcare professionals for medical advice.\n\nBy using this app, you agree to use the information responsibly and understand that it is not a substitute for professional medical advice.',
       [{text: 'OK'}],
     );
+  };
+
+  const handleLogout = () => {
+    Alert.alert('Logout', 'Are you sure you want to logout?', [
+      {text: 'Cancel', style: 'cancel'},
+      {
+        text: 'Logout',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await authService.logout();
+            setCurrentUser(null);
+            Alert.alert('Success', 'Logged out successfully');
+          } catch (error: any) {
+            Alert.alert('Error', error.message);
+          }
+        },
+      },
+    ]);
   };
 
   const SettingItem = ({
@@ -101,6 +121,26 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
     <ScrollView
       style={[styles.container, {backgroundColor: theme.background}]}
       contentContainerStyle={styles.content}>
+      {currentUser && (
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, {color: theme.textSecondary}]}>
+            ACCOUNT
+          </Text>
+          <SettingItem
+            icon="person-circle"
+            title="Profile"
+            subtitle={currentUser.name}
+            onPress={() => navigation.navigate('Profile')}
+          />
+          <SettingItem
+            icon="log-out-outline"
+            title="Logout"
+            subtitle="Sign out of your account"
+            onPress={handleLogout}
+          />
+        </View>
+      )}
+
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, {color: theme.textSecondary}]}>
           APPEARANCE

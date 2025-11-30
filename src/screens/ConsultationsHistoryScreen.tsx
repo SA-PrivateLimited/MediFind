@@ -23,7 +23,7 @@ interface ConsultationsHistoryScreenProps {
 const ConsultationsHistoryScreen: React.FC<ConsultationsHistoryScreenProps> = ({
   navigation,
 }) => {
-  const {isDarkMode, currentUser, consultations, setConsultations} = useStore();
+  const {isDarkMode, currentUser, consultations, setConsultations, setRedirectAfterLogin} = useStore();
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const [loading, setLoading] = useState(false);
@@ -160,7 +160,10 @@ const ConsultationsHistoryScreen: React.FC<ConsultationsHistoryScreenProps> = ({
         />
         <TouchableOpacity
           style={[styles.button, {backgroundColor: theme.primary}]}
-          onPress={() => navigation.navigate('Login')}>
+          onPress={() => {
+            setRedirectAfterLogin({route: 'ConsultationsHistory'});
+            navigation.navigate('Login');
+          }}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>

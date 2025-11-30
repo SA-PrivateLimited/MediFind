@@ -24,16 +24,20 @@ const ConsultationCard: React.FC<ConsultationCardProps> = ({
   const {isDarkMode} = useStore();
   const theme = isDarkMode ? darkTheme : lightTheme;
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', {
+  const formatDate = (date: Date | any) => {
+    // Convert Firestore Timestamp to Date if needed
+    const dateObj = date?.toDate ? date.toDate() : new Date(date);
+    return dateObj.toLocaleDateString('en-US', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
     });
   };
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', {
+  const formatTime = (date: Date | any) => {
+    // Convert Firestore Timestamp to Date if needed
+    const dateObj = date?.toDate ? date.toDate() : new Date(date);
+    return dateObj.toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
     });

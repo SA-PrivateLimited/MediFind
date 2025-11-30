@@ -28,7 +28,7 @@ const DoctorDetailsScreen: React.FC<DoctorDetailsScreenProps> = ({
   route,
 }) => {
   const {doctor} = route.params;
-  const {isDarkMode, currentUser} = useStore();
+  const {isDarkMode, currentUser, setRedirectAfterLogin} = useStore();
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const handleBookConsultation = () => {
@@ -38,7 +38,13 @@ const DoctorDetailsScreen: React.FC<DoctorDetailsScreenProps> = ({
         'Please login to book a consultation',
         [
           {text: 'Cancel', style: 'cancel'},
-          {text: 'Login', onPress: () => navigation.navigate('Login')},
+          {
+            text: 'Login',
+            onPress: () => {
+              setRedirectAfterLogin({route: 'DoctorDetails', params: {doctor}});
+              navigation.navigate('Login');
+            },
+          },
         ],
       );
       return;

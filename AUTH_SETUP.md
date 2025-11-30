@@ -91,7 +91,7 @@ Phone authentication requires reCAPTCHA verification. For testing:
    - Phone: `+1 650-555-3434`
    - Code: `123456`
 
-### Step 4: Update AndroidManifest.xml (Already Done)
+### Step 4: Update  .xml (Already Done)
 
 The following permissions are already added:
 - `INTERNET`

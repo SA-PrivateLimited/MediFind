@@ -2,6 +2,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useStore} from '../store';
 import {lightTheme, darkTheme} from '../utils/theme';
@@ -60,7 +61,16 @@ const ConsultationsStack = () => {
       <Stack.Screen
         name="DoctorsList"
         component={DoctorsListScreen}
-        options={{title: 'Find Doctors'}}
+        options={({navigation}) => ({
+          title: 'Find Doctors',
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ConsultationsHistory')}
+              style={{marginRight: 15}}>
+              <Icon name="calendar-outline" size={24} color={theme.text} />
+            </TouchableOpacity>
+          ),
+        })}
       />
       <Stack.Screen
         name="ConsultationsHistory"

@@ -243,7 +243,7 @@ export const fetchUserConsultations = async (
     const snapshot = await firestore()
       .collection(COLLECTIONS.CONSULTATIONS)
       .where('patientId', '==', userId)
-      .orderBy('scheduledTime', 'desc')
+      .orderBy('createdAt', 'desc')
       .get();
 
     const consultations: Consultation[] = snapshot.docs.map(doc => ({

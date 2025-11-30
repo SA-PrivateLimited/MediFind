@@ -58,6 +58,10 @@ interface AppState {
   currentUser: User | null;
   setCurrentUser: (user: User | null) => void;
 
+  // Redirect after login
+  redirectAfterLogin: {route: string; params?: any} | null;
+  setRedirectAfterLogin: (redirect: {route: string; params?: any} | null) => void;
+
   // Consultation - Doctors
   doctors: Doctor[];
   setDoctors: (doctors: Doctor[]) => void;
@@ -93,6 +97,7 @@ export const useStore = create<AppState>((set, get) => ({
 
   // Consultation initial state
   currentUser: null,
+  redirectAfterLogin: null,
   doctors: [],
   consultations: [],
   activeConsultation: null,
@@ -163,6 +168,10 @@ export const useStore = create<AppState>((set, get) => ({
     } else {
       await AsyncStorage.removeItem('currentUser');
     }
+  },
+
+  setRedirectAfterLogin: (redirect: {route: string; params?: any} | null) => {
+    set({redirectAfterLogin: redirect});
   },
 
   setDoctors: async (doctors: Doctor[]) => {

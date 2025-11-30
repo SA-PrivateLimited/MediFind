@@ -16,6 +16,8 @@ const COLLECTIONS = {
 // Configure Google Sign-In
 GoogleSignin.configure({
   webClientId: process.env.GOOGLE_WEB_CLIENT_ID || '',
+  offlineAccess: true,
+  forceCodeForRefreshToken: true,
 });
 
 /**

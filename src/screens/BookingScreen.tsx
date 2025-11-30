@@ -29,7 +29,7 @@ interface BookingScreenProps {
 
 const BookingScreen: React.FC<BookingScreenProps> = ({navigation, route}) => {
   const {doctor} = route.params;
-  const {isDarkMode, currentUser, addConsultation} = useStore();
+  const {isDarkMode, currentUser, addConsultation, setRedirectAfterLogin} = useStore();
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const [selectedDate, setSelectedDate] = useState('');
@@ -78,7 +78,20 @@ const BookingScreen: React.FC<BookingScreenProps> = ({navigation, route}) => {
 
   const handleBookConsultation = async () => {
     if (!currentUser) {
-      Alert.alert('Error', 'Please login to book consultation');
+      Alert.alert(
+        'Login Required',
+        'Please login to book a consultation',
+        [
+          {text: 'Cancel', style: 'cancel'},
+          {
+            text: 'Login',
+            onPress: () => {
+              setRedirectAfterLogin({route: 'Booking', params: {doctor}});
+              navigation.navigate('Login');
+            },
+          },
+        ]
+      );
       return;
     }
 

@@ -30,7 +30,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
   const [confirmResult, setConfirmResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
-  const {isDarkMode, setCurrentUser} = useStore();
+  const {isDarkMode, setCurrentUser, redirectAfterLogin, setRedirectAfterLogin} = useStore();
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const handleEmailLogin = async () => {
@@ -44,6 +44,15 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
       const user = await authService.loginWithEmail(email, password);
       await setCurrentUser(user);
       Alert.alert('Success', 'Logged in successfully!');
+
+      // Redirect to previous page if available
+      if (redirectAfterLogin) {
+        const {route, params} = redirectAfterLogin;
+        setRedirectAfterLogin(null);
+        navigation.navigate(route, params);
+      } else {
+        navigation.goBack();
+      }
     } catch (error: any) {
       Alert.alert('Login Failed', error.message);
     } finally {
@@ -91,6 +100,15 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
       );
       await setCurrentUser(user);
       Alert.alert('Success', 'Logged in successfully!');
+
+      // Redirect to previous page if available
+      if (redirectAfterLogin) {
+        const {route, params} = redirectAfterLogin;
+        setRedirectAfterLogin(null);
+        navigation.navigate(route, params);
+      } else {
+        navigation.goBack();
+      }
     } catch (error: any) {
       Alert.alert('Verification Failed', error.message);
     } finally {
@@ -104,6 +122,15 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
       const user = await authService.signInWithGoogle();
       await setCurrentUser(user);
       Alert.alert('Success', 'Signed in with Google successfully!');
+
+      // Redirect to previous page if available
+      if (redirectAfterLogin) {
+        const {route, params} = redirectAfterLogin;
+        setRedirectAfterLogin(null);
+        navigation.navigate(route, params);
+      } else {
+        navigation.goBack();
+      }
     } catch (error: any) {
       if (error.message !== 'Sign-in cancelled') {
         Alert.alert('Google Sign-In Failed', error.message);
